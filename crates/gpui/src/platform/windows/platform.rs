@@ -250,9 +250,12 @@ impl Platform for WindowsPlatform {
             pid,
             app_path.display(),
         );
+
+        use std::os::windows::process::CommandExt;
         let restart_process = std::process::Command::new("powershell.exe")
             .arg("-command")
             .arg(script)
+						.creation_flags(windows::Win32::System::Threading::CREATE_NO_WINDOW.0)
             .spawn();
 
         match restart_process {
