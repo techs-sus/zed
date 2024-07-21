@@ -5271,6 +5271,11 @@ impl Project {
 
         let mut child = smol::process::Command::new(command);
 
+        #[cfg(windows)]
+        {
+            use smol::process::windows::CommandExt;
+            child.creation_flags(windows::Win32::System::Threading::CREATE_NO_WINDOW.0);
+        }
         if let Some(working_dir_path) = working_dir_path {
             child.current_dir(working_dir_path);
         }
